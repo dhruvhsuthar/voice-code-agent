@@ -154,4 +154,4 @@ Actively in development. Phases 1 and 2 complete. Updated regularly as new phase
 
 ## Author
 
-Dhruv Suthar — Third year engineering student, building toward AI Engineering with a focus on Computer Vision, AR, and VR.
+Dhruv Suthar — Third year engineering student
