@@ -4,6 +4,8 @@ from intent_parsing import understand_intent
 from planner import create_plan
 from codegen import code_generator
 from code_executor import code_executor
+from debugger import auto_debugger
+from speaker import speak_results
 
 def listen():
     audio_file = record_audio(duration = 7)
@@ -28,8 +30,14 @@ def listen():
         if result["stdout"]:
             print(f'Output : {result["stdout"]}')
     else :
-        print(f'Error detected')
-        print(result['stderr'])
+        print(f'Error detected......starting auto debugger')
+        result = auto_debugger(output_path,result['stderr'])
+
+    if result['success']:
+        speak_results(result,attempts = result.get("attempts",1))
+    else :
+        speak_results(result)
+
     return intent,plan
 
 

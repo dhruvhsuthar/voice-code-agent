@@ -19,6 +19,11 @@ def code_generator(intent,steps,output_path):
     {formatted_steps}
     
     Rules : 
+    - Return ONLY raw Python code
+    - The very first character of your response must be either 'import', 'from', 'def', or '#'
+    - No explanations, no descriptions, no markdown fences
+    - No sentences in English anywhere in the output
+    - If you write anything other than Python code, you have failed
     - return only complete code file, nothing else 
     - no markdown fencies, no explanation and no commentary 
     - the code must be complete and runnable in a single file 
