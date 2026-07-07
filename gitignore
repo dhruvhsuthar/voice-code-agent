@@ -13,6 +13,10 @@ __pycache__/
 temp_audio.wav
 *.wav
 
+# Generated Output Files
+output/
+firstproject.py
+
 # MacOS
 .DS_Store
 
