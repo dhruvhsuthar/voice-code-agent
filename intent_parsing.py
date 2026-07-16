@@ -2,6 +2,8 @@ import ollama
 import json
 import re
 
+MODEL = "deepseek-coder:6.7b"
+
 def extract_json(raw_output):
 
     raw_output = re.sub(r'```json|```', '', raw_output).strip()
@@ -23,7 +25,7 @@ def understand_intent(text):
     User request : "{text}"
     '''
     response = ollama.chat(
-        model = "deepseek-coder:6.7b",
+        model = MODEL,
         messages = [{'role':'user','content':prompt}]
     )
 

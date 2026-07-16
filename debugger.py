@@ -3,6 +3,7 @@ import re
 from code_executor import code_executor
 
 MAX_RETRIES = 3
+MODEL = "deepseek-coder:6.7b"
 
 def auto_debugger(file_path, stderr):
     count = 0
@@ -33,7 +34,7 @@ def auto_debugger(file_path, stderr):
     {stderr}
 '''
         response = ollama.chat(
-            model = "deepseek-coder:6.7b",
+            model = MODEL,
             messages = [{'role':'user','content':prompt}]
         )
         fixed_code = response['message']['content'].strip()

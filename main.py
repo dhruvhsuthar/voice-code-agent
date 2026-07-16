@@ -4,10 +4,11 @@ from voice_recorder import record_audio
 from voice_transcriber import transcribe_audio
 from intent_parsing import understand_intent
 from planner import create_plan
-from codegen import code_generator
+from codegen import code_generator,generate_code_cloud
 from code_executor import code_executor
 from debugger import auto_debugger
 from speaker import speak_results
+from validator import validate
 import time
 
 engine = pyttsx3.init()
@@ -26,7 +27,7 @@ def main():
 
         engine.say("Ready for your next command, speak now")
         engine.runAndWait()
-        time.sleep(1)
+        time.sleep(3)
         audio_file = record_audio(duration = 7)
         text = transcribe_audio(audio_file)
         print(f'Done. You said : {text}')
@@ -62,6 +63,15 @@ def main():
         )
         code_generator(intent,plan,output_path)
 
+        print(f'Validating the generated code......')
+        is_valid = validate(output_path,intent)
+
+        if not is_valid :
+            print(f'The validator flaged issues. Escalating to Gemini model.....')
+            engine.say("Code review failed. Switching to gemini")
+            engine.runAndWait()
+            generate_code_cloud(intent,plan,output_path)
+            
         print(f'Running the code.......')
         result = code_executor(output_path)
 
@@ -72,7 +82,21 @@ def main():
             engine.runAndWait()
             result = auto_debugger(output_path,result['stderr'])
 
+        if not result['success']:
+            print(f'\nLocal model failed after 3 attempts. Escalating to gemini flash......')
+            engine.say('Local model failed.....escalating to gemini flash')
+            engine.runAndWait()
+
+            generate_code_cloud(intent,plan,output_path)
+            result = code_executor(output_path)
+
+            if not result['success']:
+                result = auto_debugger(output_path,result['stderr'])
+
         speak_results(result, attempts = result.get('attempts',1))
+
+
+
 
 if __name__ == "__main__":
     main()

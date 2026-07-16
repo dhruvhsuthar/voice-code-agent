@@ -1,5 +1,7 @@
 import ollama
 
+MODEL = "deepseek-coder:6.7b"
+
 def create_plan(intent):
     prompt = f'''
     You are a software planning assistant.Given a coding task, break it down 
@@ -18,7 +20,7 @@ def create_plan(intent):
     Respond only with numbered steps and nothing else.
 '''
     response = ollama.chat(
-        model = "deepseek-coder:6.7b",
+        model = MODEL,
         messages= [{'role':'user','content':prompt}]
     )
     raw_plan = response['message']['content'].strip()
